@@ -42,11 +42,6 @@ app.post('/mpesa/callback', async (req, res) => {
     const { stkCallback } = Body;
     const { ResultCode, ResultDesc, CheckoutRequestID } = stkCallback;
 
-    console.log(ResultCode);
-
-    console.log(ResultDesc);
-
-    console.log(CheckoutRequestID);
     // Update payment status in Firebase
     const paymentRef = db.collection('UserPayments').doc(CheckoutRequestID);
     await paymentRef.set({
@@ -125,7 +120,7 @@ app.get('/mpesa/status', async (req, res) => {
 
         // Update payment status in Firebase
         const paymentRef = db.collection('UserPayments').doc(transactionId);
-        console.log('paymentRef');
+      
         const paymentDoc = await paymentRef.get();
         if (paymentDoc.exists) {
             const paymentData = paymentDoc.data();

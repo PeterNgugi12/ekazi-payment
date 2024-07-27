@@ -14,7 +14,7 @@ const db = admin.firestore();
 const app = express();
 
 const port = process.env.PORT || 3000;
-const ipAddress = '192.168.0.105'; // Replace with your actual IP address
+//const ipAddress = '192.168.100.5'; // Replace with your actual IP address
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -42,12 +42,18 @@ app.post('/mpesa/callback', async (req, res) => {
     const { stkCallback } = Body;
     const { ResultCode, ResultDesc, CheckoutRequestID } = stkCallback;
 
+    console.log(ResultCode);
+
+    console.log(ResultDesc);
+
+    console.log(CheckoutRequestID);
     // Update payment status in Firebase
     const paymentRef = db.collection('UserPayments').doc(CheckoutRequestID);
     await paymentRef.set({
         ResultCode,
         ResultDesc,
-        paid: ResultCode === '0', // assuming ResultCode '0' means payment successful
+        paid: ResultCode === 0,
+        status: 'paid' 
     });
 
     res.status(200).end();
@@ -76,7 +82,7 @@ app.get('/mpesa/simulate', async (req, res) => {
             PartyB: shortCode,
             PhoneNumber: phoneNumber,
             //CallBackURL: `http://${ipAddress}:${port}/mpesa/callback?transactionId=${transactionId}`,
-            CallBackURL: `https://ekazi.co.ke/mpesa/callback?transactionId=${transactionId}`,
+            CallBackURL: `https://cf5e-154-159-237-78.ngrok-free.app/mpesa/callback?transactionId=${transactionId}`,
             AccountReference: '1328341127',
             TransactionDesc: 'Testing M-Pesa STK push',
         };
@@ -90,6 +96,7 @@ app.get('/mpesa/simulate', async (req, res) => {
 
         // Save initial payment details in Firebase
         const paymentRef = db.collection('UserPayments').doc(transactionId);
+
         await paymentRef.set({
             amount,
             phoneNumber,
@@ -152,5 +159,5 @@ app.get('/mpesa/status', async (req, res) => {
 
 // Start server
 app.listen(port, () => {
-    console.log(`Server running on http://${ipAddress}:${port}`);
+    console.log(`Server running on port ${port}`);
 });

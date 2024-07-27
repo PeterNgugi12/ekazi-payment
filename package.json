@@ -1,0 +1,21 @@
+{
+  "name": "ekazi-mpesa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+   "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "base-64": "^1.0.0",
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.3.0",
+    "nodemon": "^3.1.4",
+    "uuid": "^10.0.0"
+  }
+}
